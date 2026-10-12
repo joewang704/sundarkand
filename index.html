@@ -48,10 +48,15 @@
     padding: 2.75rem 1.25rem 1.5rem;
     border-bottom: 1px solid var(--rule);
   }
-  .theme-toggle {
+  .header-actions {
     position: absolute;
     top: 2.6rem;
     right: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+  }
+  .header-action {
     display: grid;
     place-items: center;
     width: 2.65rem;
@@ -62,19 +67,46 @@
     background: var(--toggle-bg);
     color: var(--toggle-ink);
     cursor: pointer;
+    text-decoration: none;
     transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .theme-toggle:hover { background: var(--toggle-hover); transform: rotate(-8deg); }
-  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .theme-toggle svg { width: 1.2rem; height: 1.2rem; transition: transform .25s ease; }
+  .header-action:hover { background: var(--toggle-hover); transform: translateY(-2px); }
+  .header-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .header-action svg { width: 1.2rem; height: 1.2rem; }
+  .theme-toggle svg { transition: transform .25s ease; }
+  .project-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: .65rem 1.5rem;
+    max-width: var(--reading-width);
+    margin: 1rem auto .25rem;
+    padding: 0 1.25rem;
+  }
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    color: var(--muted);
+    font: 500 .82rem/1.4 system-ui, sans-serif;
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+  .project-link:hover { color: var(--accent); }
+  .project-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
+  .project-link svg { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; }
   .theme-toggle:active svg { transform: scale(.86); }
   .theme-toggle .sun-icon { display: none; }
   :root[data-theme="dark"] .theme-toggle .moon-icon { display: none; }
   :root[data-theme="dark"] .theme-toggle .sun-icon { display: block; }
   @media (max-width: 600px) {
-    .theme-toggle { top: 1.9rem; right: 1rem; width: 2.5rem; height: 2.5rem; }
-    header h1 { padding-right: 2.6rem; }
+    .header-actions { top: 1.9rem; right: 1rem; gap: .4rem; }
+    .header-action { width: 2.45rem; height: 2.45rem; }
+    .header-action svg { width: 1.1rem; height: 1.1rem; }
+    header h1 { padding-right: 3.5rem; }
+    .project-links { margin: .85rem auto .2rem; padding: 0 1.1rem; gap: .65rem 1.2rem; }
   }
   .eyebrow {
     margin: 0 0 .45rem;
@@ -136,13 +168,25 @@
 </head>
 <body>
 <header>
-  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+  <nav class="header-actions" aria-label="Display settings">
+    <button class="header-action theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
     <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A8.5 8.5 0 0 1 11 3.1 8.5 8.5 0 1 0 20.9 13Z"/></svg>
     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
-  </button>
+    </button>
+  </nav>
   <p class="eyebrow">Ramcharitmanas</p>
   <h1>Sundarkand</h1>
 </header>
+<nav class="project-links" aria-label="Support and contact">
+  <a class="project-link" href="https://ko-fi.com/joewang704" target="_blank" rel="noopener noreferrer" aria-label="Support this project on Ko-fi" title="Support this project on Ko-fi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8Z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M10.5 14.5s-2.5-1.4-2.5-3.1a1.5 1.5 0 0 1 2.5-1.1 1.5 1.5 0 0 1 2.5 1.1c0 1.7-2.5 3.1-2.5 3.1Z"/></svg>
+    <span>Support on Ko-fi</span>
+  </a>
+  <a class="project-link" href="mailto:nathannaturevideos@gmail.com?subject=Message%20about%20Sundarkand" aria-label="Email about Sundarkand" title="Email about Sundarkand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+    <span>Contact</span>
+  </a>
+</nav>
 <main>
 <h2>Kishkinda Kand</h2>
 <p class="stage-direction">[Excerpt from the end of the previous chapter]</p>
