@@ -14,6 +14,20 @@
     --rule: #ded7c9;
     --accent: #8a3d2d;
     --reading-width: 760px;
+    --toggle-bg: #eee7da;
+    --toggle-hover: #e4dac9;
+    --toggle-ink: #5d4a36;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #191a1b;
+    --ink: #e8e1d5;
+    --muted: #aaa195;
+    --rule: #393735;
+    --accent: #d79a82;
+    --toggle-bg: #302f2d;
+    --toggle-hover: #41403d;
+    --toggle-ink: #f0d7a4;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: auto; scroll-padding-top: 1rem; }
@@ -28,10 +42,39 @@
     overflow-wrap: anywhere;
   }
   header {
+    position: relative;
     max-width: var(--reading-width);
     margin: 0 auto;
     padding: 2.75rem 1.25rem 1.5rem;
     border-bottom: 1px solid var(--rule);
+  }
+  .theme-toggle {
+    position: absolute;
+    top: 2.6rem;
+    right: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 2.65rem;
+    height: 2.65rem;
+    padding: 0;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: var(--toggle-bg);
+    color: var(--toggle-ink);
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .theme-toggle:hover { background: var(--toggle-hover); transform: rotate(-8deg); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .theme-toggle svg { width: 1.2rem; height: 1.2rem; transition: transform .25s ease; }
+  .theme-toggle:active svg { transform: scale(.86); }
+  .theme-toggle .sun-icon { display: none; }
+  :root[data-theme="dark"] .theme-toggle .moon-icon { display: none; }
+  :root[data-theme="dark"] .theme-toggle .sun-icon { display: block; }
+  @media (max-width: 600px) {
+    .theme-toggle { top: 1.9rem; right: 1rem; width: 2.5rem; height: 2.5rem; }
+    header h1 { padding-right: 2.6rem; }
   }
   .eyebrow {
     margin: 0 0 .45rem;
@@ -93,6 +136,10 @@
 </head>
 <body>
 <header>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A8.5 8.5 0 0 1 11 3.1 8.5 8.5 0 1 0 20.9 13Z"/></svg>
+    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+  </button>
   <p class="eyebrow">Ramcharitmanas</p>
   <h1>Sundarkand</h1>
 </header>
@@ -508,7 +555,32 @@
 <script>
 (() => {
   const KEY = "sundarkand-scroll-position-v1";
+  const THEME_KEY = "sundarkand-theme-v1";
+  const root = document.documentElement;
+  const themeToggle = document.getElementById("theme-toggle");
   let restorePending = true;
+
+  const applyTheme = (theme) => {
+    const isDark = theme === "dark";
+    root.dataset.theme = isDark ? "dark" : "light";
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    const label = isDark ? "Switch to light mode" : "Switch to dark mode";
+    themeToggle.setAttribute("aria-label", label);
+    themeToggle.setAttribute("title", label);
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute("content", isDark ? "#191a1b" : "#f8f5ee");
+  };
+
+  try {
+    applyTheme(localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light");
+  } catch (_) {
+    applyTheme("light");
+  }
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
+    try { localStorage.setItem(THEME_KEY, nextTheme); } catch (_) {}
+  });
 
   const savePosition = () => {
     try {
