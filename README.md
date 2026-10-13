@@ -1,1 +1,1 @@
-https://joewang704.github.io/sundarkand/
+https://sundarkand.page
